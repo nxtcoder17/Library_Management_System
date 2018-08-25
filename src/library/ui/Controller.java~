@@ -1,0 +1,350 @@
+package library.ui;
+
+import library.base.BookInfo;
+import library.base.BorrowerInfo;
+import library.database.Database;
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.Parent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.control.DatePicker;
+import javafx.geometry.Pos;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
+
+import org.controlsfx.control.Notifications;
+import javafx.util.Duration;
+
+// For TableView and Table
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+
+import javafx.collections.ObservableList;
+import javafx.scene.control.cell.PropertyValueFactory;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
+
+
+public class Controller {
+
+  /*  ===[ login.fxml ]=== */
+  @FXML private TextField login_field_user;
+  @FXML private TextField login_field_passwd;
+
+  @FXML protected void login_button_submit_Clicked()
+                throws IOException {
+    String username = login_field_user.getText();
+    String passwd = login_field_passwd.getText();
+    
+    Notifications notification = Notifications.create();
+    notification.darkStyle();
+    notification.position(Pos.TOP_RIGHT);
+    notification.hideAfter(Duration.seconds(5));
+
+    if (username.equals("admin") && passwd.equals("admin")) {
+      notification.title("Success");
+      notification.text("Hi! It's been a success");
+      notification.show();
+      homePage(login_field_user);
+    }
+    else if (username.length() == 0 || passwd.length() == 0) {
+      notification.title("Username & Password Required");
+      notification.text("You need to provide a valid set of Username & Password"); notification.showError();
+    }
+    else {
+      notification.title("Access Denied!");
+      notification.text("You must provide a valid set of Username & Password");
+      notification.show();
+    }
+  }
+
+  private void homePage(Parent controlElement) throws IOException {
+      Stage stage; Parent root; stage = (Stage) controlElement.getScene().getWindow();
+      root = FXMLLoader.load(getClass().getResource("/library/ui/homepage.fxml"));
+
+      stage.hide();
+      stage.setScene(new Scene(root, 600, 400));
+      stage.centerOnScreen();
+      stage.show();
+  }
+
+
+  private void sceneSwitcher(String fxmlFileName,Parent controlElement, 
+                  String title, double width, double height) throws IOException {
+    Stage stage;
+    Parent newRoot;
+
+    stage = (Stage) controlElement.getScene().getWindow();
+    newRoot = FXMLLoader.load(
+                getClass().getResource("/library/ui/" + fxmlFileName));
+
+    stage.hide();
+    stage.setTitle(title);
+    stage.setScene(new Scene(newRoot, width, height));
+    stage.show();
+  }
+
+
+  /* =============[ homepage.fxml ]================== */
+  @FXML private Button homepage_button_addBook;
+  @FXML private Button homepage_button_removeBook;
+  @FXML private Button homepage_button_displayBook;
+  @FXML private Button homepage_button_issueBook;
+  @FXML private Button homepage_button_listOfIssuedBooks;
+
+
+  @FXML protected void homepage_button_addBook_Clicked() throws IOException {
+
+    sceneSwitcher("addBook.fxml", homepage_button_addBook,
+                    "Library: Add Book", 800, 400);
+
+  }
+
+  @FXML protected void homepage_button_removeBook_Clicked() throws IOException{
+
+    sceneSwitcher("removeBook.fxml", homepage_button_removeBook,
+                      "Library: Remove Book", 800, 400);
+
+  }
+
+
+  @FXML protected void homepage_button_displayBook_Clicked() throws IOException {
+    
+    Stage stage = (Stage) homepage_button_displayBook.getScene().getWindow();
+    VBox newRoot = (VBox) FXMLLoader.load(getClass().getResource("/library/ui/displayBook.fxml"));
+
+    /* Creating a table */
+    TableView<BookInfo> table = new TableView<>();
+
+    TableColumn<BookInfo, String> col_sno = new TableColumn<>("S.No.");
+    col_sno.setCellValueFactory(
+                    new PropertyValueFactory("sno"));
+
+    TableColumn<BookInfo, String> col_bookId = new TableColumn<>("Book's ID");
+    col_bookId.setCellValueFactory(
+                    new PropertyValueFactory("bookId"));
+
+    TableColumn<BookInfo, String> col_title = new TableColumn<>("Title");
+    col_title.setCellValueFactory(
+                    new PropertyValueFactory("title"));
+
+    TableColumn<BookInfo, String> col_author = new TableColumn<>("Author");
+    col_author.setCellValueFactory(
+                    new PropertyValueFactory("author"));
+
+
+    TableColumn<BookInfo, String> col_branch = new TableColumn<>("Branch");
+    col_branch.setCellValueFactory(
+                    new PropertyValueFactory("branch"));
+
+    TableColumn<BookInfo, String> col_publisher = new TableColumn<>("Publisher");
+    col_publisher.setCellValueFactory(
+                    new PropertyValueFactory("publisher"));
+
+
+    TableColumn<BookInfo, String> col_price = new TableColumn<>("Price");
+    col_price.setCellValueFactory(
+                    new PropertyValueFactory("price"));
+
+    TableColumn<BookInfo, String> col_copies = new TableColumn<>("Copies");
+    col_copies.setCellValueFactory(
+                    new PropertyValueFactory("copies"));
+
+    // Adding all columns to the Table
+    table.getColumns().add(col_sno);
+    table.getColumns().add(col_bookId);
+    table.getColumns().add(col_branch);
+    table.getColumns().add(col_title);
+    table.getColumns().add(col_author);
+    table.getColumns().add(col_publisher);
+    table.getColumns().add(col_price);
+    table.getColumns().add(col_copies);
+
+    ObservableList<BookInfo> data = null;
+
+    try {
+      Database db = new Database();
+      data = db.getAllBooks();
+    } catch(SQLException e) {
+      System.out.println("[Database Exception]: " + e.getMessage());
+      e.printStackTrace();
+    } catch(IOException z) {
+      System.out.println("[IOException]: " + z.getMessage());
+    }
+
+    table.setItems(data);
+
+    HBox hbox = new HBox();
+    hbox.setSpacing(30);
+
+    Button displayBook_button_submit = new Button("submit");
+    displayBook_button_submit.setOnAction(
+                    (ActionEvent e) -> {
+                      try {
+                        homePage(displayBook_button_submit);
+                      } catch(IOException io) {
+                        System.out.println("Can't switch to Home Screen");
+                        io.printStackTrace();
+                      }
+                    });
+
+
+    Button displayBook_button_cancel = new Button("cancel");
+    displayBook_button_cancel.setOnAction(
+                    (ActionEvent e) ->  {
+                      try {
+                        homePage(displayBook_button_cancel);
+                      } catch(IOException io) {
+                        System.out.println("Can't switch to Home Screen");
+                        io.printStackTrace();
+                      }
+                    });
+    
+    hbox.getChildren().add(displayBook_button_submit);
+    hbox.getChildren().add(displayBook_button_cancel);
+    
+
+    /* Adding Stuffs to the new Scene */
+    stage.hide();
+    newRoot.getChildren().add(table);
+    newRoot.getChildren().add(hbox);
+    stage.setScene(new Scene(newRoot, 1000, 500));
+    stage.show();
+  }
+
+
+  @FXML protected void homepage_button_issueBook_Clicked() throws IOException {
+
+    sceneSwitcher("issueBook.fxml", homepage_button_issueBook,
+                      "Library: Issue Book", 800, 400);
+
+  }
+
+  @FXML protected void homepage_button_listOfIssuedBooks_Clicked() throws IOException {
+
+    Stage stage = (Stage) homepage_button_listOfIssuedBooks.getScene().getWindow();
+    Parent newRoot = FXMLLoader.load(getClass().getResource("/library/ui/listOfIssuedBooks.fxml"));
+
+    stage.hide();
+    stage.setScene(new Scene(newRoot, 800, 600));
+  }
+
+  /* ====================[ addBooks.fxml ]================== */
+
+  @FXML private TextField addBook_field_bookId;
+  @FXML private TextField addBook_field_title;
+  @FXML private TextField addBook_field_author;
+  @FXML private TextField addBook_field_branch;
+  @FXML private TextField addBook_field_publisher;
+  @FXML private TextField addBook_field_price;
+  @FXML private TextField addBook_field_copies;
+
+  @FXML private Button addBooks_button_submit;
+  @FXML private Button addBooks_button_cancel;
+  @FXML private Label addBook_label_message;
+
+  @FXML protected void addBooks_button_submit_Clicked() throws SQLException,IOException {
+    Database db = new Database();
+
+    BookInfo book = new BookInfo();
+    book.setBookId    (addBook_field_bookId.getText());
+    book.setTitle     (addBook_field_title.getText());
+    book.setAuthor    (addBook_field_bookId.getText());
+    book.setBranch    (addBook_field_branch.getText());
+    book.setPublisher (addBook_field_publisher.getText());
+    book.setPrice     (Integer.parseInt(addBook_field_price.getText()));
+    book.setCopies    (Integer.parseInt(addBook_field_copies.getText()));
+
+    try {
+      db.addBook(book);
+    } catch (SQLException e) {
+      System.out.println("[SQL Error]: Book can't be added to the DB");
+      System.out.println(e.getMessage());
+    }
+    addBook_label_message.setText("Book Successfully Added into the DB");
+  }
+
+  @FXML protected void addBooks_button_cancel_Clicked() throws IOException {
+    homePage(addBooks_button_cancel);
+  }
+
+  /* =====================[ removeBook.fxml ]================== */
+  @FXML private TextField removeBook_field_bookId;
+  @FXML private Button removeBook_button_submit;
+  @FXML private Button removeBook_button_cancel;
+
+  @FXML protected void removeBook_button_submit_Clicked() throws IOException {
+    try {
+      Database db = new Database();
+      BookInfo book = new BookInfo();
+      book.setBookId(removeBook_field_bookId.getText());
+      db.removeBook(book);
+    } 
+    catch(SQLException e) {
+      System.out.println("[Error]: " + e.getMessage());
+    }
+  }
+
+  @FXML protected void removeBook_button_cancel_Clicked() throws IOException {
+    homePage(removeBook_button_cancel);
+  }
+
+  /* =================== issueBook.fxml ================================ */
+  /* Text Fields: issueBook.fxml */
+  @FXML private TextField issueBook_field_libraryId;
+  @FXML private TextField issueBook_field_bookId;
+  @FXML private TextField issueBook_field_borrowerName;
+  @FXML private TextField issueBook_field_bookName;
+
+  @FXML private DatePicker issueBook_date_issue;
+  @FXML private DatePicker issueBook_date_return;
+
+  @FXML private Button  issueBook_button_cancel;
+  @FXML private Button  issueBook_button_submit;
+  @FXML private Label issueBook_label;
+
+  @FXML protected void issueBook_button_submit_Clicked() throws IOException {
+    BorrowerInfo borrower = new BorrowerInfo();
+    borrower.setLibraryId   (issueBook_field_libraryId.getText());
+    borrower.setBookId      (issueBook_field_bookId.getText());
+    borrower.setBorrowerName(issueBook_field_borrowerName.getText());
+    borrower.setTitle       (issueBook_field_bookName.getText());
+    borrower.setIssueDate   (datePickerToString(issueBook_date_issue, "yyyy-MM-dd"));
+    borrower.setReturnDate  (datePickerToString(issueBook_date_return, "yyyy-MM-dd"));
+    // String dateString = datePickerToString(issueBook_date_issue, "dd-MM-yyyy");
+    // issueBook_label.setText(dateString);
+    // issueBook_label.setText(df.format(issueBook_date_issue.getValue());
+    try {
+      Database db = new Database();
+      db.issueBook(borrower);
+    } catch(SQLException e) {
+      System.out.println("Book can't be issued ");
+      e.printStackTrace();
+    }
+  }
+
+  private static String datePickerToString(DatePicker obj, String pattern) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+    LocalDate date = obj.getValue(); 
+
+    return formatter.format(date);
+  }
+
+  @FXML protected void issueBook_button_cancel_Clicked() throws IOException {
+    homePage(issueBook_button_cancel);
+  }
+
+}

@@ -1,0 +1,133 @@
+* {
+  main-bg-color: #202622;
+  label-text-color: #31d861;
+  text-field-bg: #93bca1;
+  text-field-fill: #252826;
+}
+
+.rootPane {
+    -fx-background-color: main-bg-color;
+    -fx-text-fill: #072b63;
+}
+
+.title {
+    -fx-text-fill: dodgerblue;
+    -fx-font-size: 24px;
+    -fx-font-family: "Montserrat ExtraBold";
+}
+
+.login {
+    -fx-font-family: "Montserrat ExtraBold";
+    -fx-font-size: 18px;
+    -fx-text-fill: crimson;
+}
+
+.forgotPassword {
+  -fx-text-fill: #1dd698;
+  -fx-font-size: 16px;
+  -fx-text-effect: underline;
+  -fx-text-align: left;
+}
+
+.forgotPassword:hover {
+   -fx-text-fill: dodgerblue;
+}
+
+.createAccount {
+  -fx-text-fill: #1dd698;
+  -fx-font-size: 14px;
+  -fx-text-effect: underline;
+  -fx-text-align: left;
+}
+
+.createAccount:hover {
+  -fx-text-fill: dodgerblue;
+}
+.submitButton {
+    -fx-background-color: coral;
+    -fx-text-fill: antiquewhite ;
+    -fx-font-size: 15px;
+    -fx-font-family: "Montserrat ExtraBold";
+}
+
+.submitButton:hover {
+    -fx-background-color: dodgerblue;
+    -fx-text-fill: antiquewhite;
+    -fx-font-size: 16px;
+    -fx-font-family: "Montserrat ExtraBold";
+}
+
+.textField {
+    /*-fx-background-color: #8baf97;*/
+    -fx-background-color: #93bca1;
+    -fx-text-fill: #252826;
+    -fx-font-size: 14px;
+    -fx-font-family: "Montserrat ExtraBold";
+}
+
+.textField.error {
+  -fx-border-color: red;
+  -fx-border-width: 4px;
+}
+
+/* DatePicker Class {{{*/
+
+.datePicker > .text-field {
+    -fx-background-color: text-field-bg;
+    -fx-text-fill: text-field-fill;
+    -fx-font-size: 14px;
+    -fx-font-family: "Montserrat ExtraBold";
+}
+
+.datePicker > .arrow-button {
+    -fx-border-color: black;
+    -fx-border-size: 2px;
+    -fx-background-color: text-field-bg;
+    -fx-font-size: 16px;
+    -fx-font-family: "Montserrat ExtraBold";
+}
+
+.datePicker:focused > .arrow-button {
+    -fx-background-color: white;
+}
+
+/* End of DatePicker }}}*/
+
+.menuBar {
+  -fx-background-color: main-bg-color;
+  -fx-text-fill: #ff00ff;
+  /* -fx-font-size: 18px; */
+  /* -fx-font-family: "Montserrat ExtraBold"; */
+  -fx-align-text: right;
+}
+
+.menuMenu {
+  -fx-text-fill: crimson;
+}
+
+.menu {
+  /* -fx-background-color: main-bg-color; */
+  -fx-background-color: #93bca1;
+  -fx-font-size: 18px;
+  -fx-font-family: "Montserrat ExtraBold";
+}
+
+.addBook-labels {
+  -fx-text-fill: label-text-color;
+  -fx-font-size: 18px;
+  -fx-font-family: "Montserrat ExtraBold";
+}
+
+.securityQuestion {
+    -fx-font-size: 13px;
+    -fx-text-fill: orange;
+    -fx-font-family: "Montserrat ExtraBold";
+}
+
+.textFieldReadOnly {
+    /* -fx-opacity: 0; */
+    -fx-background-color: #93bca1;
+    -fx-text-fill: #252826;
+    -fx-font-size: 14px;
+    -fx-font-family: "Montserrat ExtraBold";
+}

@@ -1,0 +1,82 @@
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.collections.ObservableList?>
+
+<?import java.lang.String?>
+<VBox fx:controller="library.ui.Controller"
+      xmlns:fx="https://javafx.com/fxml"
+      alignment="CENTER"
+      spacing="30" styleClass="rootPane"
+      stylesheets="/library/themes/dark_theme.css" >
+
+    <GridPane hgap="30" vgap="15" alignment="CENTER">
+      <Label  GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+              text="Username" styleClass="addBook-labels" />
+      <TextField GridPane.rowIndex="0"  GridPane.columnIndex="1"
+              prefWidth="300"
+              fx:id="signup_field_username" styleClass="textField" />
+
+      <Label  GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+              text="Password" styleClass="addBook-labels" />
+      <PasswordField GridPane.rowIndex="1" GridPane.columnIndex="1"
+              prefWidth="300"
+              fx:id="signup_field_password"  styleClass="textField" />
+
+
+      <Label  GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+              text="Confirm Password" styleClass="addBook-labels" />
+      <PasswordField GridPane.rowIndex="2"  GridPane.columnIndex="1"
+              prefWidth="300"
+              fx:id="signup_field_confirmPassword" styleClass="textField" />
+
+      <Label  GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+              text="Email" styleClass="addBook-labels" />
+      <TextField GridPane.rowIndex="3"  GridPane.columnIndex="1"
+              prefWidth="300"
+              fx:id="signup_field_email" styleClass="textField" />
+
+      <Label GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+              text="Security Question" styleClass="addBook-labels" />
+      <ComboBox GridPane.rowIndex="4" GridPane.columnIndex="1" GridPane.columnSpan="3"
+            prefWidth="300"
+            promptText="Choose one ..."
+            fx:id="signup_combo_securityQuestion" styleClass="textField" >
+            <items>
+              <FXCollections fx:factory="observableArrayList">
+                <String fx:value="What is your mother's maiden name?" />
+                <String fx:value="What is your pet's name? " />
+                <String fx:value="Which is your favourite song?" />
+                <String fx:value="What was your city of birth?" />
+              </FXCollections>
+            </items>
+      </ComboBox>
+
+      <Label GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+              text="Security Answer" styleClass="addBook-labels" />
+      <TextField GridPane.rowIndex="5" GridPane.columnIndex="1" 
+              prefWidth="300"
+              styleClass="textField"
+              fx:id="signup_field_securityAnswer" />
+
+    </GridPane>
+
+    <HBox spacing="50" alignment="CENTER">
+      <Button fx:id="signup_button_submit"
+              text="submit" styleClass="submitButton"
+              onAction="#signup_button_submit_Clicked" />
+
+      <Button fx:id="signup_button_cancel"
+              text="cancel" styleClass="submitButton"
+              onAction="#signup_button_cancel_Clicked" />
+    </HBox>
+</VBox>
+
