@@ -71,4 +71,10 @@
               styleClass="submitButton"
               text="List of Issued Books"
               onAction="#homepage_button_listOfIssuedBooks_Clicked" />
+
+      <Button fx:id="homepage_button_addMembers"
+            prefWidth="200" prefHeight="50"
+            styleClass="submitButton"
+            text="Add Members"
+            onAction="#homepage_button_addMembers_Clicked" />
 </VBox>

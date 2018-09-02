@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.collections.ObservableList?>
+<?import java.lang.String?>
+
+<VBox fx:controller="library.ui.Controller"
+      xmlns:fx="https://javafx.com/fxml"
+      stylesheets="/library/themes/dark_theme.css"
+      styleClass="rootPane"
+      spacing="10" alignment="CENTER">
+
+      <GridPane hgap="10" vgap="10" alignment="CENTER" >
+
+        <Label GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+          text="First Name" styleClass="addBook-labels" />
+        <TextField GridPane.rowIndex="0"  GridPane.columnIndex="1"
+          fx:id="addMembers_field_firstName" styleClass="textField" />
+
+        <Label GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+          text="Last Name" styleClass="addBook-labels" /> 
+        <TextField GridPane.rowIndex="1"  GridPane.columnIndex="1" 
+          fx:id="addMembers_field_lastName" styleClass="textField" /> 
+
+        <Label GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+          text="Branch" styleClass="addBook-labels" />
+      <!-- <TextField GridPane.rowIndex="2"  GridPane.columnIndex="1" -->
+          <!-- fx:id="addMembers_field_branch" styleClass="textField" /> -->
+
+      <ComboBox GridPane.rowIndex="2" GridPane.columnIndex="1"
+          prefWidth="200"
+          styleClass="textField"
+          fx:id="addMembers_combo_branch"
+          promptText="Choose one ..." >
+          <items>
+              <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="CSE" />
+                  <String fx:value="ME" />
+                  <String fx:value="CE" />
+                  <String fx:value="EE" />
+                  <String fx:value="ECE" />
+                  <String fx:value="ME" />
+              </FXCollections>
+          </items>
+      </ComboBox>
+
+         <Label GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.halignment="RIGHT" 
+             text="Semester" styleClass="addBook-labels" /> 
+      <ComboBox GridPane.rowIndex="3" GridPane.columnIndex="1"
+          prefWidth="200"
+          promptText="Choose one ..."
+          fx:id="addMembers_combo_semester" styleClass="textField" >
+          <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="1" />
+                <String fx:value="2" />
+                <String fx:value="3" />
+                <String fx:value="4" />
+                <String fx:value="5" />
+                <String fx:value="6" />
+                <String fx:value="7" />
+                <String fx:value="8" />
+            </FXCollections>
+          </items>
+        </ComboBox>
+
+        <Label GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+          text="RollNo" styleClass="addBook-labels" />
+        <TextField GridPane.rowIndex="4"  GridPane.columnIndex="1"
+          fx:id="addMembers_field_rollNo" styleClass="textField" />
+
+        <Label GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+          text="Email" styleClass="addBook-labels" />
+        <TextField GridPane.rowIndex="5"  GridPane.columnIndex="1"
+          fx:id="addMembers_field_email" styleClass="textField" />
+
+      </GridPane>
+
+      <HBox spacing="30" alignment="CENTER">
+        <Button fx:id="addMembers_button_submit"
+                text="Submit"
+                styleClass="submitButton"
+                onAction="#addMembers_button_submit_Clicked" />
+
+        <Button fx:id="addMembers_button_cancel"
+                text="cancel"
+                styleClass="submitButton"
+                onAction="#addMembers_button_cancel_Clicked" />
+      </HBox>
+
+</VBox>

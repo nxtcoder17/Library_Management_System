@@ -25,19 +25,13 @@ import javafx.collections.ObservableList;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 
-/* Notification Support */
-import javafx.geometry.Pos;
-import javafx.scene.image.ImageView;
-import org.controlsfx.control.Notifications;
-import javafx.util.Duration;
-
 //=============[ End of: IMPORTS ]==============}}}
 
 public class Database {
 	private static final String DB_NAME = "library";
 	private static final String DB_URL = "jdbc:mariadb://localhost/" + DB_NAME;
 
-	private static final String BOOKS_TABLE = "book_details";
+	private static final String TABLE_NAME = "book_details";
 	private static final String BORROWER_TABLE = "borrowed_books";
 	private static final String AUTHORIZED = "authorized";
 	private static final String MEMBERS = "members";
@@ -45,9 +39,6 @@ public class Database {
     private static Connection connection;
     private static Statement stmt;
     private static PreparedStatement prepStmt;
-
-    private static Notifications notification;
-    private static final String NOTIFY_ICONS = "/library/images/notifications/";
 
 	public Database() throws SQLException,IOException {
         connection = DriverManager.getConnection(DB_URL, "root", "");
@@ -67,10 +58,6 @@ public class Database {
         stmt.executeQuery(MEMBERS_SCHEMA);
         // System.out.println("Successfully Created Table [or it exists]");
 
-        notification = Notifications.create();
-        notification.darkStyle();
-        notification.position(Pos.TOP_RIGHT);
-        notification.hideAfter(Duration.seconds(5));
 	}
 
   //===========[ Read From SQL File ]============{{{
@@ -91,16 +78,18 @@ public class Database {
 
   //==========[ Add User ]========== {{{
   public void addUser(NewUser user) throws SQLException {
-
+      final String MAX_ID = "SELECT COUNT(branch) from " + MEMBERS
+                                + " WHERE branch=?";
       final String ADD_USER = "INSERT INTO " + AUTHORIZED
-                        + "(username,password,email,security,answer) "
-                        + "VALUES(?,?,?,?,?)";
+                        + "(libraryId,username,password,email,security,answer) "
+                        + "VALUES(?,?,?,?,?,?)";
       prepStmt = connection.prepareStatement(ADD_USER);
-      prepStmt.setString(1, user.getUsername());
-      prepStmt.setString(2, user.getPassword());
-      prepStmt.setString(3, user.getEmail());
-      prepStmt.setString(4, user.getSecurity());
-      prepStmt.setString(5, user.getAnswer());
+      prepStmt.setString(1, user.getLibraryId());
+      prepStmt.setString(2, user.getUsername());
+      prepStmt.setString(3, user.getPassword());
+      prepStmt.setString(4, user.getEmail());
+      prepStmt.setString(5, user.getSecurity());
+      prepStmt.setString(6, user.getAnswer());
 
       prepStmt.executeUpdate();
   }
@@ -110,30 +99,25 @@ public class Database {
   public void addMember(MemberInfo member)
                             throws SQLException {
 
-    // String branchCount = "SELECT libraryId FROM " + MEMBERS
-                            // + " ORDER BY branch DESC LIMIT 1 WHERE branch=?";
-    // prepStmt = connection.prepareStatement(branchCount);
-    // prepStmt.setString(1, member.getBranch());
-    // ResultSet r = prepStmt.executeQuery();
-// 
-    // String max_id = "";
-    // if (r.next()) {
-        // String max_id = r.getString("libraryId");
-    // } else {
-        // max_id = member.getBranch().toLower() + "_" + "001"
-    // }
-    // // Replacing all Alphabets and _ with nothing 
-    // int max_val_id = Integer.parseInt(max_id.replaceAll("[A-Za-z_]", ""));
-    // 
-// 
-    // System.out.println("Max Value is " + max_val);
+    String branchCount = "SELECT libraryId FROM " + MEMBERS
+                            + " ORDER BY branch DESC LIMIT 1 WHERE branch=?";
+    prepStmt = connection.prepareStatement(branchCount);
+    prepStmt.setString(1, member.getBranch());
+    ResultSet r = prepStmt.executeQuery();
 
+    String max_id = "";
+    if (r.next()) {
+    String max_id = r.getString("libraryId");
+    // Replacing all Alphabets and _ with nothing 
+    int max_val_id = Integer.parseInt(max_id.replaceAll("[A-Za-z_]", ""));
+    
 
-    //=====================================
+    System.out.println("Max Value is " + max_val);
+
 
     final String ADD_MEMBER = "INSERT INTO " + MEMBERS
-                                + "(firstName,lastName,semester,rollno,branch,email,libraryId)"
-                                + " VALUES(?,?,?,?,?,?,?)";
+                                + "(firstName,lastName,semester,rollno,branch,libraryId)"
+                                + " VALUES(?,?,?,?,?,?)";
 
     prepStmt = connection.prepareStatement(ADD_MEMBER);
     prepStmt.setString(1, member.getFirstName());
@@ -141,18 +125,16 @@ public class Database {
     prepStmt.setInt   (3, member.getSemester());
     prepStmt.setInt   (4, member.getRollNo());
     prepStmt.setString(5, member.getBranch());
-    prepStmt.setString(6, member.getEmail());
 
-    // String newLibraryId = member.getBranch().toLower() + "_" + ++max_val_id;
-    String newLibraryId = member.getBranch().toLowerCase() + "_" + member.getRollNo();
-    prepStmt.setString(7, newLibraryId);
+    String newLibraryId = member.getBranch().toLower() + "_" + ++max_val_id;
+    prepStmt.setString(6, newLibraryId);
 
     prepStmt.executeUpdate();
   }
   //=============[ End of: Add New Library Member ]=====}}}
 
   //=============[ Remove Library Member ]=========={{{
-  public boolean removeMember(MemberInfo member) throws SQLException {
+  public boolean removeMember(MemberInfo member) {
       // First, Check if Item is in Database or not
       String checkExistance = "SELECT * from " + MEMBERS
                                 + " WHERE libraryId=?";
@@ -195,7 +177,7 @@ public class Database {
 
   //==========[ Add Book ]==========={{{
   public void addBook(BookInfo book) throws SQLException {
-      final String ADD_BOOK = "INSERT INTO " + BOOKS_TABLE
+      final String ADD_BOOK = "INSERT INTO " + TABLE_NAME
                       + "(bookId,title,author,publisher,price,copies,branch) "
                       + "VALUES(?,?,?,?,?,?,?)";
       prepStmt = connection.prepareStatement(ADD_BOOK); 
@@ -220,7 +202,7 @@ public class Database {
        # Adjust AUTO_INCREMENT value to 1 again
    */
 
-    final String SEARCH_BOOKID = "SELECT sno,bookId from " + BOOKS_TABLE
+    final String SEARCH_BOOKID = "SELECT sno,bookId from " + TABLE_NAME
                                     + " WHERE bookId=?";
     prepStmt = connection.prepareStatement(SEARCH_BOOKID);
     prepStmt.setString(1, book.getBookId());
@@ -229,19 +211,19 @@ public class Database {
     int sno = r.getInt("sno");
     System.out.println("Serial No: " + sno);
 
-    final String REMOVE_BOOK = "DELETE FROM " + BOOKS_TABLE
+    final String REMOVE_BOOK = "DELETE FROM " + TABLE_NAME
                               + " WHERE bookId=?";
 
     prepStmt = connection.prepareStatement(REMOVE_BOOK);
     prepStmt.setString(1, book.getBookId());
     prepStmt.executeUpdate();
 
-    final String DECREMENT_SNO = "UPDATE " + BOOKS_TABLE
+    final String DECREMENT_SNO = "UPDATE " + TABLE_NAME
                                     + " SET sno=sno-1 where sno > " + sno;
     prepStmt = connection.prepareStatement(DECREMENT_SNO);
     prepStmt.executeUpdate();
 
-    final String FIX_AUTO_INCREMENT = "ALTER TABLE " + BOOKS_TABLE
+    final String FIX_AUTO_INCREMENT = "ALTER TABLE " + TABLE_NAME
                                         + " AUTO_INCREMENT=1";
     prepStmt = connection.prepareStatement(FIX_AUTO_INCREMENT);
     prepStmt.executeUpdate();
@@ -252,7 +234,7 @@ public class Database {
 
   //============[ Get All Books ]==========={{{
   public ObservableList<BookInfo> getAllBooks() throws SQLException {
-    final String FETCH_ALL = "SELECT * from " + BOOKS_TABLE;
+    final String FETCH_ALL = "SELECT * from " + TABLE_NAME;
 
     LinkedList<BookInfo> list = new LinkedList<>();
 
@@ -278,64 +260,19 @@ public class Database {
   //=============[ End of: Get All Books ]=========}}}
   
   //=============[ Issue Book ]============={{{
-public boolean issueBook(BorrowerInfo  borrower) throws SQLException {
-
-    /* [ Step 1 ]:  I need to check whether my book exists in the repo or not */
-    final String IS_PRESENT = "SELECT * from " + BOOKS_TABLE + " where bookId=?";
+  public void issueBook(BorrowerInfo  borrower) throws SQLException {
+    // First, I need to check whether my book exists in the repo or not
+    final String IS_PRESENT = "SELECT * from " + TABLE_NAME + " where bookId=?";
     prepStmt = connection.prepareStatement(IS_PRESENT);
     prepStmt.setString(1, borrower.getBookId());
 
     ResultSet r = prepStmt.executeQuery();
     if (r.next() == false) {
-        System.out.println("Book with BookID: " + borrower.getBookId() + " is not in our repos. ");
-        notification.title("Book Not Exists");
-        notification.text("Book with BookID: " + borrower.getBookId() + " is not in our repos. ");
-        notification.graphic(new ImageView(NOTIFY_ICONS + "invalid-64px.png"));
-        notification.show();
-        return false;
+      System.out.println("Book with BookID: " + borrower.getBookId() + " is not in our repos. ");
+      return;
     }
 
-    if (r.getInt("copies") == 0) {
-        System.out.println("Book with BookID: " +
-                borrower.getBookId() + " has no copies left in our Library.");
-        return false;
-    }
 
-    // [Step 2 ]: Is borrower a member of library
-    final String IS_ID_PRESENT = "SELECT * from " + MEMBERS + " where libraryId=?";
-    prepStmt = connection.prepareStatement(IS_ID_PRESENT);
-    prepStmt.setString(1, borrower.getLibraryId());
-
-    r = prepStmt.executeQuery();
-    if (r.next() == false) {
-        System.out.println("Person with LibraryID: " + borrower.getLibraryId() + " is not in our repos. ");
-        return false;
-    }
-
-    // If Already issued, Don't issue New Book
-    if (r.getInt("borrowCount") == 1) {
-        System.out.println(borrower.getLibraryId() + " has already borrowed a book."
-                                        + " Submit previous issue first");
-        return false;
-    }
-
-    // [ Step 3 ]: Decrement copies count from BOOKS Table 
-    final String DEC_COUNT = "UPDATE " + BOOKS_TABLE
-                                + " set copies = copies - 1"
-                                + " WHERE bookId = ?";
-    prepStmt = connection.prepareStatement(DEC_COUNT);
-    prepStmt.setString(1, borrower.getBookId());
-    prepStmt.executeUpdate();
-
-    // [ Step 4]: Increment the borrowCount to 1 in MEMBERS Table
-    final String INC_BORROW_COUNT = "UPDATE " + MEMBERS
-                                    + " set borrowCount = borrowCount + 1"
-                                    + " WHERE libraryId = ?";
-    prepStmt = connection.prepareStatement(INC_BORROW_COUNT);
-    prepStmt.setString(1, borrower.getLibraryId());
-    prepStmt.executeUpdate();
-
-    // [ Step 5]: Add The Borrower to the BORROWER TABLE
     final String ISSUE_BOOK = "INSERT INTO " + BORROWER_TABLE
                                     + "(bookId,libraryId,borrowerName,title,issueDate,returnDate)"
                                     + " VALUES(?,?,?,?,?,?)";
@@ -349,8 +286,7 @@ public boolean issueBook(BorrowerInfo  borrower) throws SQLException {
     prepStmt.setString(6, borrower.getReturnDate());
 
     prepStmt.executeUpdate();
-    return true;
-}
+  }
   //==============[ End of: Issue Book ]===========}}}
 
   //=============[ Get All Issued Books ]============={{{
