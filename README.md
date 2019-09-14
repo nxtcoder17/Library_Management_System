@@ -3,8 +3,6 @@ title:
 - Library Management System
 author:
 - Anshuman Bhaskar
-theme:
-- progressbar
 ---
 
 # Project Introduction    

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.GridPane?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.geometry.Insets?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.paint.ImagePattern?>
+<?import javafx.scene.shape.Circle?>
+
+<VBox fx:controller="library.ui.Controller"
+      xmlns:fx="https://javafx.com/fxml"
+      stylesheets="/library/themes/dark_theme.css"
+      styleClass="rootPane"
+      spacing="10" alignment="CENTER">
+
+      <Label text="Indian Library of Computers"
+        styleClass="title">
+        <graphic> 
+          <ImageView> 
+            <Image url="/library/images/books.png" />
+          </ImageView>
+        </graphic>
+      </Label>
+            
+      <GridPane hgap="10" vgap="10" alignment="CENTER">
+          <Label GridPane.rowIndex="0" GridPane.columnIndex="0"
+                text="Username" styleClass="login">
+            <graphic>
+              <ImageView>
+                <!-- Image Source: https://www.flaticon.com/packs/login-6 [Size: 32] -->
+                <Image url="/library/images/lock.png" />
+              </ImageView>
+            </graphic>
+          </Label>
+
+          <TextField GridPane.rowIndex="0" GridPane.columnIndex="1"
+              fx:id="login_field_user" styleClass="textField" >
+            <tooltip>  
+              <Tooltip text="Enter your Username" />
+            </tooltip> 
+          </TextField>
+
+
+          <Label GridPane.rowIndex="1" GridPane.columnIndex="0"
+                text="Password" styleClass="login">
+            <graphic>
+              <ImageView>
+                <!-- Image Source: https://www.flaticon.com/packs/login-6 [Size: 32] -->
+                <Image url="/library/images/keyhole.png" />
+              </ImageView>
+            </graphic>
+          </Label>
+
+          <PasswordField GridPane.rowIndex="1" GridPane.columnIndex="1"
+              fx:id="login_field_passwd"
+              onAction="#handle_EnterKey_press"
+              styleClass="textField" >
+
+            <tooltip> 
+              <Tooltip text="Enter your Password here" /> 
+            </tooltip> 
+          </PasswordField>
+      </GridPane>
+
+      <HBox spacing="60" alignment="CENTER">
+        <padding> 
+          <Insets top="0" right="20" bottom="0" left="40"/>
+        </padding>
+        <ToggleButton fx:id="login_button_submit" styleClass="submitButton"
+                      text="Log In"
+                      onAction="#login_button_submit_Clicked" />
+
+          <Button fx:id="signup_button" styleClass="submitButton"
+                text="Sign Up"
+                onAction="#createAccount_Clicked"/>
+
+      </HBox>
+
+      <Label text="Forgot Password ? " styleClass="forgotPassword"
+        onMouseClicked="#forgot_password_click" />
+
+</VBox>
+

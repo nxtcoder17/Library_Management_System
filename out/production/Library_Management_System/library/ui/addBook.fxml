@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:controller="library.ui.Controller"
+      xmlns:fx="https://javafx.com/fxml"
+      stylesheets="/library/themes/dark_theme.css"
+      styleClass="rootPane"
+      spacing="10" alignment="CENTER">
+
+      <GridPane hgap="10" vgap="10" alignment="CENTER" >
+
+        <Label GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+          text="BookId" styleClass="addBook-labels" />
+        <TextField GridPane.rowIndex="0"  GridPane.columnIndex="1"
+          fx:id="addBook_field_bookId" styleClass="textField" />
+
+        <Label GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+          text="Title" styleClass="addBook-labels" /> 
+        <TextField GridPane.rowIndex="1"  GridPane.columnIndex="1" 
+          fx:id="addBook_field_title" styleClass="textField" /> 
+
+        <Label GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+          text="Author" styleClass="addBook-labels" />
+        <TextField GridPane.rowIndex="2"  GridPane.columnIndex="1"
+          fx:id="addBook_field_author" styleClass="textField" />
+
+        <Label GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+          text="Branch" styleClass="addBook-labels" />
+        <TextField GridPane.rowIndex="3"  GridPane.columnIndex="1"
+          fx:id="addBook_field_branch" styleClass="textField" />
+
+        <Label GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+          text="Publisher" styleClass="addBook-labels" />
+        <TextField GridPane.rowIndex="4"  GridPane.columnIndex="1"
+          fx:id="addBook_field_publisher" styleClass="textField" />
+
+        <Label GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+          text="Price" styleClass="addBook-labels" />
+        <TextField GridPane.rowIndex="5"  GridPane.columnIndex="1"
+          fx:id="addBook_field_price" styleClass="textField" />
+
+        <Label GridPane.rowIndex="6" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+          text="Copies" styleClass="addBook-labels" />
+        <TextField GridPane.rowIndex="6"  GridPane.columnIndex="1"
+          fx:id="addBook_field_copies" styleClass="textField" />
+
+      </GridPane>
+
+      <HBox spacing="30" alignment="CENTER">
+        <Button fx:id="addBooks_button_submit"
+                text="Submit"
+                styleClass="submitButton"
+                onAction="#addBooks_button_submit_Clicked" />
+
+        <Button fx:id="addBooks_button_cancel"
+                text="cancel"
+                styleClass="submitButton"
+                onAction="#addBooks_button_cancel_Clicked" />
+      </HBox>
+
+      <Label fx:id="addBook_label_message" />
+</VBox>

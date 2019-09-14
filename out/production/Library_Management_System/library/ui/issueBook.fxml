@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:controller="library.ui.Controller"
+      xmlns:fx="https://javafx.com/fxml"
+      stylesheets="/library/themes/dark_theme.css"
+      styleClass="rootPane"
+      spacing="15" alignment="CENTER">
+
+      <GridPane hgap="30" vgap="10" alignment="CENTER" >
+
+        <Label GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+            text="Library ID " styleClass="addBook-labels" />
+        <TextField GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="10"
+            fx:id="issueBook_field_libraryId" styleClass="textField" />
+
+        <Label GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+            text="Book ID " styleClass="addBook-labels" />
+        <TextField GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.columnSpan="10"
+          fx:id="issueBook_field_bookId" styleClass="textField" />
+
+        <Label GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+            text="Borrower Name " styleClass="addBook-labels" />
+        <TextField GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="10"
+          fx:id="issueBook_field_borrowerName" styleClass="textField" />
+
+        <Label GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+            text="Book Name " styleClass="addBook-labels" />
+        <TextField GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="10"
+            fx:id="issueBook_field_bookName" styleClass="textField" />
+
+        <Label GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+            text="Issue Date " styleClass="addBook-labels" />
+        <DatePicker GridPane.rowIndex="4" GridPane.columnIndex="1" GridPane.columnSpan="10"
+            fx:id="issueBook_date_issue" styleClass="datePicker" />
+
+        <Label GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+            text="Return Date " styleClass="addBook-labels" />
+        <DatePicker GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.columnSpan="10"
+          fx:id="issueBook_date_return"  styleClass="datePicker" />
+            
+      </GridPane>
+
+      <HBox spacing="30" alignment="CENTER">
+        <Button fx:id="issueBook_button_submit"
+                text="submit"
+                styleClass="submitButton"
+                onAction="#issueBook_button_submit_Clicked" />
+
+        <Button fx:id="issueBook_button_cancel"
+                text="cancel"
+                styleClass="submitButton"
+                onAction="#issueBook_button_cancel_Clicked" />
+      </HBox>
+
+      <Label fx:id="issueBook_label" />
+</VBox>

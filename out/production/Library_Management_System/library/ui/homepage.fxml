@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<VBox fx:controller="library.ui.Controller"
+      xmlns:fx="https://javafx.com/fxml"
+      stylesheets="/library/themes/dark_theme.css"
+      styleClass="rootPane"
+      spacing="30" alignment="CENTER" >
+
+      <MenuBar styleClass="menuBar">
+        <Menu text="My_Account" styleClass="menuMenu">
+          <graphic>
+            <ImageView>
+              <Image url="/library/images/account.png"/>
+          </ImageView>
+          </graphic>
+
+          <MenuItem text="LogOut" onAction="#logout_method">
+            <graphic>
+              <ImageView> 
+                <Image url="/library/images/exit.png" />
+              </ImageView>
+            </graphic>
+          </MenuItem>
+        </Menu>
+      </MenuBar>
+      <Button fx:id="homepage_button_addBook"
+              prefWidth="200" prefHeight="50"
+              styleClass="submitButton"
+              text="Add Book"
+              onAction="#homepage_button_addBook_Clicked">
+              <graphic>
+                <ImageView>
+                  <Image url="/library/images/addBook.png"/>
+                </ImageView>
+              </graphic>
+      </Button>
+
+
+      <Button fx:id="homepage_button_removeBook"
+              prefWidth="200" prefHeight="50"
+              styleClass="submitButton"
+              text="Remove Book"
+              onAction="#homepage_button_removeBook_Clicked" />
+
+
+      <Button fx:id="homepage_button_displayBook"
+              prefWidth="200" prefHeight="50"
+              styleClass="submitButton"
+              text="Display Books"
+              onAction="#homepage_button_displayBook_Clicked" />
+
+
+      <Button fx:id="homepage_button_issueBook"
+              prefWidth="200" prefHeight="50"
+              styleClass="submitButton"
+              text="Issue Book"
+              onAction="#homepage_button_issueBook_Clicked" />
+
+
+      <Button fx:id="homepage_button_listOfIssuedBooks"
+              prefWidth="200" prefHeight="50"
+              styleClass="submitButton"
+              text="List of Issued Books"
+              onAction="#homepage_button_listOfIssuedBooks_Clicked" />
+
+      <Button fx:id="homepage_button_addMembers"
+            prefWidth="200" prefHeight="50"
+            styleClass="submitButton"
+            text="Add Members"
+            onAction="#homepage_button_addMembers_Clicked" />
+</VBox>
